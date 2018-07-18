@@ -100,6 +100,12 @@ router.post('/', (req, res, next) => {
 
 });
 
+// GET ALL USERS
+router.get('/users', (req, res) => {
+  User.find().sort({ username: 'asc' })
+    .then(results => { res.json(results); });
+});
+
 module.exports = router;
 
 

@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const localStrategy = require('./passport/local');
-
+const jwtStrategy = require('./passport/jwt');
 const { PORT, MONGODB_URI } = require('./config');
 
 const notesRouter = require('./routes/notes');
@@ -18,6 +18,7 @@ const authRouter = require('./routes/auth');
 const app = express();
 
 passport.use('local', localStrategy);
+passport.use(jwtStrategy);
 
 // Log all requests. Skip logging during
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'common', {
@@ -57,7 +58,7 @@ app.use((err, req, res, next) => {
 // Listen for incoming connections
 if (process.env.NODE_ENV !== 'test') {
   // Connect to DB and Listen for incoming connections
-  mongoose.connect(MONGODB_URI)
+  mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
     .then(instance => {
       const conn = instance.connections[0];
       console.info(`Connected to: mongodb://${conn.host}:${conn.port}/${conn.name}`);

@@ -206,7 +206,7 @@ describe('Noteful API - Tags', function () {
           expect(res.body.id).to.equal(data.id);
           expect(res.body.name).to.equal(updateItem.name);
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
-          // expect item to have been updated
+          // expect item to have been updated.
           expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
         });
     });

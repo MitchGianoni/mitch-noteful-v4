@@ -3,7 +3,6 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
-const express = require('express');
 const jwt = require('jsonwebtoken');
 const app = require('../server');
 const Folder = require('../models/folder');
@@ -253,7 +252,6 @@ describe('Noteful API - Folders', function () {
       return Folder.find({ userId: user.id }).limit(2)
         .then(results => {
           const [item1, item2] = results;
-          console.log(item1, item2);
           item1.name = item2.name;
           return chai.request(app)
             .put(`/api/folders/${item1.id}`)

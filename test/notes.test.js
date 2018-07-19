@@ -35,12 +35,16 @@ describe('Noteful API - Notes', function () {
       Note.insertMany(seedNotes),
 
       Folder.insertMany(seedFolders),
-      Folder.createIndexes(),
+      //Folder.createIndexes(),
 
       Tag.insertMany(seedTags),
-      Tag.createIndexes()
+      //Tag.createIndexes()
 
-    ])
+    ]).then(([users]) => {
+      Folder.createIndexes();
+      Tag.createIndexes();
+      return [users];
+    })
       .then(([users]) => {
         user = users[0];
         token = jwt.sign({ user }, JWT_SECRET, { subject: user.username });

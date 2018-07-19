@@ -6,9 +6,10 @@ const router = express.Router();
 
 // POST /api/users
 router.post('/', (req, res, next) => {
-  const { fullname, username, password } = req.body;
+  let { fullname = '', username, password } = req.body;
 
   const requiredFields = ['username', 'password'];
+
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
@@ -78,6 +79,8 @@ router.post('/', (req, res, next) => {
     });
   }
 
+  fullname = fullname.trim();
+
   return User.hashPassword(password)
     .then(digest => {
       const newUser = {
@@ -97,13 +100,6 @@ router.post('/', (req, res, next) => {
       }
       next(err);
     });
-
-});
-
-// GET ALL USERS
-router.get('/users', (req, res) => {
-  User.find().sort({ username: 'asc' })
-    .then(results => { res.json(results); });
 });
 
 module.exports = router;

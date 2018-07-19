@@ -249,10 +249,11 @@ describe('Noteful API - Folders', function () {
         });
     });
 
-    it.only('should return an error when given a duplicate name', function () {
+    it('should return an error when given a duplicate name', function () {
       return Folder.find({ userId: user.id }).limit(2)
         .then(results => {
           const [item1, item2] = results;
+          console.log(item1, item2);
           item1.name = item2.name;
           return chai.request(app)
             .put(`/api/folders/${item1.id}`)

@@ -55,7 +55,7 @@ describe('Noteful API - Notes', function () {
     return mongoose.disconnect();
   });
 
-  describe.only('GET /api/notes', function () {
+  describe('GET /api/notes', function () {
 
     it('should return the correct number of Notes', function () {
       return Promise.all([
@@ -95,10 +95,10 @@ describe('Noteful API - Notes', function () {
 
     it('should return correct search results for a searchTerm query', function () {
       const searchTerm = 'gaga';
-      // const re = new RegExp(searchTerm, 'i');
+      const re = new RegExp(searchTerm, 'i');
       const dbPromise = Note.find({ userId: user.id,
-        title: { $regex: searchTerm, $options: 'i' }
-        // $or: [{ title: re }, { content: re }]
+        //title: { $regex: searchTerm, $options: 'i' }
+        $or: [{ title: re }, { content: re }]
       });
       const apiPromise = chai.request(app)
         .get(`/api/notes?searchTerm=${searchTerm}`)
@@ -127,7 +127,7 @@ describe('Noteful API - Notes', function () {
         .then((_data) => {
           data = _data;
           return Promise.all([
-            Note.find({ folderId: data.id }),
+            Note.find({ folderId: data.id, userId: user.id }),
             chai.request(app).get(`/api/notes?folderId=${data.id}`)
               .set('Authorization', `Bearer ${token}`)
           ]);
@@ -146,7 +146,7 @@ describe('Noteful API - Notes', function () {
         .then((_data) => {
           data = _data;
           return Promise.all([
-            Note.find({ tags: data.id }, { userId: user.id }),
+            Note.find({ tags: data.id, userId: user.id }),
             chai.request(app).get(`/api/notes?tagId=${data.id}`)
               .set('Authorization', `Bearer ${token}`)
           ]);

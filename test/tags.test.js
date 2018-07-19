@@ -255,7 +255,7 @@ describe('Noteful API - Tags', function () {
         });
     });
 
-    it.only('should return an error when given a duplicate name', function () {
+    it('should return an error when given a duplicate name', function () {
       return Tag.find({ userId: user.id }).limit(2)
         .then(results => {
           const [item1, item2] = results;
